@@ -1,36 +1,34 @@
-# Deploying to GitHub Pages
+# Is It Peak Claude Hours?
 
-This repo is already a static site (`index.html`), so the easiest setup is GitHub Actions + Pages.
+A tiny site with one purpose: quickly show whether we're in the peak Claude window.
 
-## One-time GitHub setup
+## Why this exists
 
-1. Push this branch to GitHub.
-2. In your repo, go to **Settings → Pages**.
-3. Under **Build and deployment**, set **Source** to **GitHub Actions**.
-4. Commit/push the workflow in `.github/workflows/pages.yml` (included in this repo).
+I wanted a fast, no-nonsense reference for peak hours instead of repeatedly doing timezone math.
 
-After that, every push to `main` deploys the site.
+Context that motivated it:
 
-## First deploy
+- Reddit: https://www.reddit.com/r/ClaudeAI/comments/1s4idaq/update_on_session_limits/
+- X/Twitter: https://x.com/trq212/status/2037254607001559305
 
-If your default branch is `main`, the included workflow will run automatically after push.
+## What "peak" means here
 
-Your site URL will be:
+- **Weekdays (Mon–Fri)**
+- **5:00 AM – 11:00 AM PT**
+- Often written as **1:00 PM – 7:00 PM GMT**
 
-- `https://<your-username>.github.io/<repo-name>/`
+## Live URL
 
-## Important note about project pages path
+- https://Matthew-Work-Account.github.io/is-it-peak-claude/
 
-Because this is likely a **project pages** site (not `username.github.io` root site), links should be relative (like `./about.html`) instead of absolute (`/about.html`) so they work under `/<repo-name>/`.
+## What the page shows
 
-## If your default branch is not `main`
+- `PEAK` vs `OFF-PEAK`
+- Live countdown to the next boundary
+- Timeline marker for current PT time
 
-Edit `.github/workflows/pages.yml` and change:
+## Scope
 
-```yaml
-on:
-  push:
-    branches: ["main"]
-```
-
-to your branch name.
+- `index.html` contains all UI + logic.
+- `.github/workflows/pages.yml` deploys to GitHub Pages.
+- No framework, no build step, no backend.
