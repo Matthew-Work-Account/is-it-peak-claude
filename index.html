@@ -12,8 +12,7 @@
         --text: #ecf0ff;
         --muted: #b8c0e0;
         --accent: #6ca0ff;
-        --peak: #ff6b6b;
-        --offpeak: #3ddc97;
+        --success: #3ddc97;
       }
 
       * { box-sizing: border-box; }
@@ -34,228 +33,124 @@
         background: color-mix(in oklab, var(--card) 90%, black 10%);
         border: 1px solid #2f3868;
         border-radius: 16px;
-        padding: 1.25rem;
+        padding: clamp(1.25rem, 4vw, 2rem);
         box-shadow: 0 10px 30px rgb(0 0 0 / 0.35);
       }
 
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        margin: 0 0 0.75rem;
+        color: var(--success);
+        font-size: 0.82rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .eyebrow::before {
+        content: "";
+        display: block;
+        width: 0.65rem;
+        height: 0.65rem;
+        border-radius: 999px;
+        background: var(--success);
+        box-shadow: 0 0 14px var(--success);
+      }
+
       h1 {
-        margin: 0 0 0.5rem;
-        font-size: clamp(1.4rem, 2.5vw, 2rem);
+        margin: 0 0 0.75rem;
+        font-size: clamp(1.8rem, 5vw, 3.2rem);
+        line-height: 1.05;
       }
 
-      .status {
-        margin: 0.25rem 0 0.75rem;
-        font-size: clamp(1.15rem, 2.2vw, 1.5rem);
-        font-weight: 700;
-      }
-
-      .status.peak { color: var(--peak); }
-      .status.offpeak { color: var(--offpeak); }
-
-      .detail {
+      .lede {
+        margin: 0;
+        max-width: 62ch;
         color: var(--muted);
-        margin: 0.2rem 0;
+        font-size: clamp(1rem, 2.2vw, 1.2rem);
+        line-height: 1.6;
       }
 
-      .timeline-wrap { margin-top: 1.2rem; }
-
-      .timeline-title {
-        margin: 0 0 0.45rem;
-        color: var(--muted);
-        font-size: 0.95rem;
+      .notice {
+        margin: 1.5rem 0 0;
+        padding: 1rem;
+        border: 1px solid rgb(108 160 255 / 0.45);
+        border-radius: 12px;
+        background: rgb(108 160 255 / 0.1);
       }
 
-      .timeline {
-        position: relative;
-        height: 56px;
-        border-radius: 10px;
-        overflow: hidden;
-        border: 1px solid #35417a;
-        background: linear-gradient(90deg, #1a2140 0%, #11162c 100%);
+      .notice p {
+        margin: 0;
+        color: var(--text);
+        line-height: 1.55;
       }
 
-      .peak-window {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        background: linear-gradient(90deg, rgb(255 107 107 / 0.85), rgb(255 107 107 / 0.6));
-      }
-
-      .now-marker {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        width: 2px;
-        background: #fff;
-        box-shadow: 0 0 8px #fff;
-      }
-
-      .now-dot {
-        position: absolute;
-        top: 50%;
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        background: #fff;
-        transform: translate(-4px, -50%);
-        box-shadow: 0 0 12px #fff;
-      }
-
-      .ticks {
+      .actions {
         display: flex;
-        justify-content: space-between;
-        margin-top: 0.4rem;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-top: 1.5rem;
+      }
+
+      a {
+        color: var(--accent);
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 2.75rem;
+        padding: 0.75rem 1rem;
+        border: 1px solid rgb(108 160 255 / 0.55);
+        border-radius: 999px;
+        background: rgb(108 160 255 / 0.16);
+        color: var(--text);
+        font-weight: 700;
+        text-decoration: none;
+      }
+
+      .button.secondary {
+        background: transparent;
         color: var(--muted);
-        font-size: 0.8rem;
       }
 
       .foot {
-        margin-top: 1rem;
+        margin: 1.5rem 0 0;
         color: var(--muted);
         font-size: 0.85rem;
-        line-height: 1.4;
-      }
-
-      code {
-        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-        background: rgb(255 255 255 / 0.07);
-        padding: 0.15rem 0.32rem;
-        border-radius: 6px;
+        line-height: 1.5;
       }
     </style>
   </head>
   <body>
     <main class="card">
-      <h1>Is it peak Claude hours?</h1>
-      <p id="status" class="status">Checking…</p>
-      <p id="countdown" class="detail"></p>
-      <p id="clock" class="detail"></p>
+      <p class="eyebrow">Sunset notice</p>
+      <h1>No, it is not peak Claude hours.</h1>
+      <p class="lede">
+        Anthropic removed the Claude Code peak-hours limit reduction for Pro and Max accounts and doubled Claude Code's
+        five-hour rate limits for Pro, Max, Team, and seat-based Enterprise plans on May 6, 2026.
+      </p>
 
-      <section class="timeline-wrap" aria-label="Daily peak window timeline">
-        <p class="timeline-title">Today in Pacific Time (PT)</p>
-        <div class="timeline" role="img" aria-label="24 hour timeline with peak window and current time marker">
-          <div id="peakWindow" class="peak-window"></div>
-          <div id="nowMarker" class="now-marker"></div>
-          <div id="nowDot" class="now-dot"></div>
-        </div>
-        <div class="ticks">
-          <span>00:00</span>
-          <span>05:00 peak starts</span>
-          <span>11:00 peak ends</span>
-          <span>24:00</span>
-        </div>
+      <section class="notice" aria-label="Retirement notice">
+        <p>
+          This tracker used to exist because a weekday 5am–11am PT peak window affected Claude Code usage. Since that
+          rule has been reverted, there is no longer a peak-hours schedule to calculate. The site is intentionally kept
+          as a small historical marker instead of a live countdown.
+        </p>
       </section>
 
+      <div class="actions" aria-label="Links">
+        <a class="button" href="https://www.anthropic.com/news/higher-limits-spacex">Read Anthropic's announcement</a>
+        <a class="button secondary" href="https://github.com/Matthew-Work-Account/is-it-peak-claude">View source</a>
+      </div>
+
       <p class="foot">
-        Based on the posted schedule: weekdays <code>5am–11am PT</code> (also written as <code>1pm–7pm GMT</code>).<br />
-        Countdown is computed using Pacific time weekdays.
+        Last updated May 6, 2026. If Anthropic introduces a new peak-hours policy in the future, this page can be
+        revived with the new source and schedule.
       </p>
     </main>
-
-    <script>
-      const PT_ZONE = 'America/Los_Angeles';
-      const PEAK_START_HOUR = 5;
-      const PEAK_END_HOUR = 11;
-      const MS_IN_HOUR = 3600 * 1000;
-      const MS_IN_DAY = 24 * MS_IN_HOUR;
-
-      const statusEl = document.getElementById('status');
-      const countdownEl = document.getElementById('countdown');
-      const clockEl = document.getElementById('clock');
-      const peakWindowEl = document.getElementById('peakWindow');
-      const nowMarkerEl = document.getElementById('nowMarker');
-      const nowDotEl = document.getElementById('nowDot');
-
-      const dtf = new Intl.DateTimeFormat('en-US', {
-        timeZone: PT_ZONE,
-        weekday: 'short',
-        year: 'numeric',
-        month: 'short',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: false,
-      });
-
-      function getPTParts(date = new Date()) {
-        const parts = dtf.formatToParts(date);
-        const map = Object.fromEntries(parts.map((p) => [p.type, p.value]));
-        return {
-          weekday: map.weekday,
-          year: Number(map.year),
-          month: map.month,
-          day: Number(map.day),
-          hour: Number(map.hour),
-          minute: Number(map.minute),
-          second: Number(map.second),
-          label: dtf.format(date),
-        };
-      }
-
-      function isPTWeekday(weekdayShort) {
-        return !['Sat', 'Sun'].includes(weekdayShort);
-      }
-
-      function formatDuration(ms) {
-        const totalSec = Math.max(0, Math.floor(ms / 1000));
-        const hours = Math.floor(totalSec / 3600);
-        const minutes = Math.floor((totalSec % 3600) / 60);
-        const seconds = totalSec % 60;
-        return `${hours}h ${minutes}m ${seconds}s`;
-      }
-
-      function msUntilWeekdayPeakStart(parts) {
-        const nowMinutes = parts.hour * 60 + parts.minute + parts.second / 60;
-        const startMinutes = PEAK_START_HOUR * 60;
-
-        if (isPTWeekday(parts.weekday) && nowMinutes < startMinutes) {
-          return (startMinutes - nowMinutes) * 60 * 1000;
-        }
-
-        const weekdayIndex = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(parts.weekday);
-        let daysToAdd = 1;
-        while (daysToAdd <= 7) {
-          const next = (weekdayIndex + daysToAdd) % 7;
-          if (![0, 6].includes(next)) break;
-          daysToAdd += 1;
-        }
-
-        const remainingToday = MS_IN_DAY - ((parts.hour * 3600 + parts.minute * 60 + parts.second) * 1000);
-        return remainingToday + (daysToAdd - 1) * MS_IN_DAY + PEAK_START_HOUR * MS_IN_HOUR;
-      }
-
-      function update() {
-        const now = new Date();
-        const pt = getPTParts(now);
-        const weekday = isPTWeekday(pt.weekday);
-        const nowHourFraction = pt.hour + pt.minute / 60 + pt.second / 3600;
-
-        const inPeak = weekday && nowHourFraction >= PEAK_START_HOUR && nowHourFraction < PEAK_END_HOUR;
-        const msToBoundary = inPeak
-          ? (PEAK_END_HOUR - nowHourFraction) * MS_IN_HOUR
-          : msUntilWeekdayPeakStart(pt);
-
-        statusEl.textContent = inPeak ? 'Yes — it is PEAK Claude hours.' : 'No — it is OFF-PEAK Claude hours.';
-        statusEl.className = `status ${inPeak ? 'peak' : 'offpeak'}`;
-
-        countdownEl.textContent = inPeak
-          ? `Time remaining in peak window: ${formatDuration(msToBoundary)}`
-          : `Time until next peak window: ${formatDuration(msToBoundary)}`;
-
-        const userZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        clockEl.textContent = `Now: ${now.toLocaleString()} (${userZone}) | PT: ${pt.label} (${PT_ZONE})`;
-
-        peakWindowEl.style.left = `${(PEAK_START_HOUR / 24) * 100}%`;
-        peakWindowEl.style.width = `${((PEAK_END_HOUR - PEAK_START_HOUR) / 24) * 100}%`;
-
-        const markerLeftPercent = (nowHourFraction / 24) * 100;
-        nowMarkerEl.style.left = `${markerLeftPercent}%`;
-        nowDotEl.style.left = `${markerLeftPercent}%`;
-      }
-
-      update();
-      setInterval(update, 1000);
-    </script>
   </body>
 </html>

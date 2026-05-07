@@ -1,34 +1,20 @@
 # Is It Peak Claude Hours?
 
-A tiny site with one purpose: quickly show whether we're in the peak Claude window.
+This tiny site has been sunset.
 
-## Why this exists
+## Why it is retired
 
-I wanted a fast, no-nonsense reference for peak hours instead of repeatedly doing timezone math.
+Anthropic announced on May 6, 2026 that it removed the Claude Code peak-hours limit reduction for Pro and Max accounts and doubled Claude Code's five-hour rate limits for Pro, Max, Team, and seat-based Enterprise plans:
 
-Context that motivated it:
+- https://www.anthropic.com/news/higher-limits-spacex
 
-- Reddit: https://www.reddit.com/r/ClaudeAI/comments/1s4idaq/update_on_session_limits/
-- X/Twitter: https://x.com/trq212/status/2037254607001559305
-
-## What "peak" means here
-
-- **Weekdays (Mon–Fri)**
-- **5:00 AM – 11:00 AM PT**
-- Often written as **1:00 PM – 7:00 PM GMT**
+The original site existed to answer whether Claude Code was currently in a weekday **5:00 AM – 11:00 AM PT** peak window. Since that policy has been reverted, there is no longer a peak-hours schedule to calculate.
 
 ## Live URL
 
 - https://Matthew-Work-Account.github.io/is-it-peak-claude/
 
-## What the page shows
-
-- `PEAK` vs `OFF-PEAK`
-- Live countdown to the next boundary
-- Timeline marker for current PT time
-
 ## Scope
 
-- `index.html` contains all UI + logic.
-- `.github/workflows/pages.yml` deploys to GitHub Pages.
+- `index.html` contains the retired static page.
 - No framework, no build step, no backend.
